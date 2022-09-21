@@ -6,9 +6,9 @@ data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
+#data "aws_eks_cluster_auth" "cluster" {
+#  name = module.eks.cluster_id
+#}
 
 variable "cluster_name" {
   default = "my-cluster"
@@ -21,9 +21,14 @@ variable "instance_type" {
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
-  version                = "~> 1.11"
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
+    command     = "aws"
+  }
+#  token                  = data.aws_eks_cluster_auth.cluster.token
+#  load_config_file       = false
+#  version                = "~> 1.11"
 }
 
 data "aws_availability_zones" "available" {
@@ -31,7 +36,7 @@ data "aws_availability_zones" "available" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.47.0"
+  version = "3.14.2"
 
   name                 = "k8s-${var.cluster_name}-vpc"
   cidr                 = "172.16.0.0/16"
@@ -55,29 +60,38 @@ module "vpc" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "12.2.0"
-  worker_ami_name_filter_windows = "*"
+  version = "18.26.6"
+  #worker_ami_name_filter_windows = "*"
 
   cluster_name    = "eks-${var.cluster_name}"
-  cluster_version = "1.23"
-  subnets         = module.vpc.private_subnets
+  cluster_version = "1.22"
 
   vpc_id = module.vpc.vpc_id
+  subnet_ids         = module.vpc.private_subnets
 
-  node_groups = {
+  eks_managed_node_group_defaults = {
+    ami_type = "AL2_x86_64"
+
+    attach_cluster_primary_security_group = true
+
+    # Disabling and using externally provided security groups
+    create_security_group = false
+  }
+
+  eks_managed_node_groups = {
     first = {
-      desired_capacity = 1
-      max_capacity     = 10
+      desired_capacity = 2
+      max_capacity     = 3
       min_capacity     = 1
 
       instance_type = var.instance_type
     }
   }
 
-  write_kubeconfig   = true
-  config_output_path = "./"
+  #write_kubeconfig   = true
+  #config_output_path = "./"
 
-  workers_additional_policies = [aws_iam_policy.worker_policy.arn]
+  #workers_additional_policies = [aws_iam_policy.worker_policy.arn]
 }
 
 resource "aws_iam_policy" "worker_policy" {
@@ -88,12 +102,15 @@ resource "aws_iam_policy" "worker_policy" {
 }
 
 provider "helm" {
-  version = "1.3.1"
+  #version = "1.3.1"
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-    load_config_file       = false
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    exec {
+      api_version = "client.authentication.k8s.io/v1alpha1"
+      args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
+      command     = "aws"
+    }
   }
 }
 
@@ -102,7 +119,7 @@ resource "helm_release" "ingress" {
   chart      = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   version    = "1.1.0"
-  timeout   = 600000
+  timeout   = 6000
   wait      = true
 
   set {
