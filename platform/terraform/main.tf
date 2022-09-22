@@ -10,13 +10,12 @@ terraform {
 }
 
 provider "aws" {
-  #region = "ap-northeast-1"
-  region = "us-west-2"
+  region = "ap-northeast-2"
 }
 
 module "dev_cluster" {
   source        = "./cluster"
   cluster_name  = "dev"
-  instance_type = "t2.micro"
-  #instance_type = "t3.medium"
+  #instance_type = "t2.micro"
+  instance_type = "t3.medium"
 }
