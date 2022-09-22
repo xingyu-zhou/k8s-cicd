@@ -22,7 +22,7 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
+    api_version = "client.authentication.k8s.io/v1"
     args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
     command     = "aws"
   }
@@ -64,7 +64,7 @@ module "eks" {
   #worker_ami_name_filter_windows = "*"
 
   cluster_name    = "eks-${var.cluster_name}"
-  cluster_version = "1.22"
+  cluster_version = "1.23"
 
   vpc_id = module.vpc.vpc_id
   subnet_ids         = module.vpc.private_subnets
@@ -107,7 +107,7 @@ provider "helm" {
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
     exec {
-      api_version = "client.authentication.k8s.io/v1alpha1"
+      api_version = "client.authentication.k8s.io/v1"
       args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
       command     = "aws"
     }
