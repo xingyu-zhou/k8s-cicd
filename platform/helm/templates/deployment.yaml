@@ -1,31 +1,19 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-service
-spec:
-  selector:
-    app: sample-deployment-v1
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-deployment-v1
+  name: test-deployment-v1
   namespace: default
   labels:
-    app: sample-app
+    app: test-app
 spec:
   replicas: {{.Values.replicaCount}}
   selector:
     matchLabels:
-      app: sample-app
+      app: test-app
   template:
     metadata:
       labels:
-        app: sample-app
+        app: test-app
     spec:
       affinity:
         nodeAffinity:
@@ -39,19 +27,26 @@ spec:
                       - arm64
       containers:
         - name: applicaiton
-          image: {{.Values.app.image}}
+          image: {{.Values.image}}
           ports:
             - name: http
               containerPort: 8080
           env:
-            - name: SECRET_USERNAME
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: endpoint
+                  optional: false
+
+            - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mysecret
                   key: username
                   optional: false
 
-            - name: SECRET_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysecret
@@ -60,18 +55,3 @@ spec:
           imagePullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/os: linux
-{{/*---*/}}
-{{/*apiVersion: extensions/v1beta1*/}}
-{{/*kind: Ingress*/}}
-{{/*metadata:*/}}
-{{/*  name: my-ingress*/}}
-{{/*  annotations:*/}}
-{{/*    kubernetes.io/ingress.class: "nginx"*/}}
-{{/*spec:*/}}
-{{/*  rules:*/}}
-{{/*    - http:*/}}
-{{/*        paths:*/}}
-{{/*          - path: /my/path*/}}
-{{/*            backend:*/}}
-{{/*              serviceName: my-service*/}}
-{{/*              servicePort: 8080*/}}

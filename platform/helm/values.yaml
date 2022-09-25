@@ -4,5 +4,4 @@
 
 replicaCount: 1
 
-app:
-  image: 'hello-world:latest'
+image: 'hello-world:latest'
