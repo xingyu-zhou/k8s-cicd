@@ -71,7 +71,7 @@ jobs:
 
       - name: ECR image name
         run: echo ${{ steps.ecr.outputs.image }}
-          
+        
       - name: Deploy Helm
         uses: deliverybot/helm@v1
         with:
@@ -82,3 +82,5 @@ jobs:
             app.image: ${{ secrets.ECR_AWS_ENDPOINT }}:${{ steps.ecr.outputs.image }}
           value-files: 'platform/helm/values.yaml'
           chart: 'platform/helm'
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
