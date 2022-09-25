@@ -19,9 +19,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  image:
+  deploy:
     runs-on: ubuntu-latest
-    needs: time
     outputs:
       image: ${{ steps.ecr.outputs.image }}
 
