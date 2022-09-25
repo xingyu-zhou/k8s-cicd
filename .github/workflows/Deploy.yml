@@ -79,7 +79,7 @@ jobs:
           namespace: ${{ env.namespace }}
           cluster-name: ${{ env.cluster }}
           values: |
-            app.image: ${{ secrets.ECR_AWS_ENDPOINT }}:${{ steps.ecr.outputs.image }}
+            image: ${{ secrets.ECR_AWS_ENDPOINT }}:${{ steps.ecr.outputs.image }}
           value-files: 'platform/helm/values.yaml'
           chart: 'platform/helm'
         env:
