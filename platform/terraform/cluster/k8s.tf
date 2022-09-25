@@ -22,10 +22,6 @@ module "eks" {
     vpc_security_group_ids = [aws_security_group.eks.id]
   }
 
-  #  node_security_group_tags = {
-  #    "kubernetes.io/cluster/${var.cluster_name}" = null
-  #  }
-
   eks_managed_node_groups = {
     green = {
       min_size     = 1
@@ -36,8 +32,10 @@ module "eks" {
       capacity_type  = "SPOT"
       taints         = {
       }
+      tags = var.tags
     }
   }
+  tags = var.tags
 }
 
 provider "kubernetes" {
