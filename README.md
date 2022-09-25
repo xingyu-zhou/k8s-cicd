@@ -4,7 +4,7 @@ What Suppose to happen
 ---
 
 When source codes are merged/committed to main branch,
-workflow of "Release_Deploy" will automatically be triggered.
+workflow of "Deploy" will automatically be triggered.
 It will release a new image to ECR and make a new deployment to EKS.
 
 ---
