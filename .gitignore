@@ -31,3 +31,5 @@ dependency-reduced-pom.xml
 
 .vscode/
 README.html
+/platform/terraform/.terraform.lock.hcl
+/platform/terraform/.terraform/
