@@ -18,7 +18,7 @@ variable "env_name"{
 }
 
 variable "cluster_name" {
-  default = "my-cluster"
+  default = "my-k8s-cluster"
 }
 
 variable "k8s_instance_type" {
@@ -31,4 +31,8 @@ variable "database_name" {
 
 variable "db_instance_type" {
   default = "db.r5.large"
+}
+
+variable "ecr_names" {
+  default = ["dev-k8s-cluster-repo"]
 }

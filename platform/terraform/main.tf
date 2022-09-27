@@ -1,5 +1,6 @@
 locals {
   dev = {
+    ecr               = ["test-app-repo"]
     k8s_instance_type = "t2.micro"
     db_instance_type  = "db.t3.medium"
     tags              = {
@@ -14,6 +15,7 @@ module "dev_k8s_cluster" {
   tags                        = local.dev.tags
   env_name                    = local.dev.tags.Environment
   cluster_name                = local.dev.tags.Owner
+  ecr_names                   = local.dev.ecr
   k8s_instance_type           = local.dev.k8s_instance_type
   db_instance_type            = local.dev.db_instance_type
   vpc_id                      = module.dev_vpc.vpc_id
