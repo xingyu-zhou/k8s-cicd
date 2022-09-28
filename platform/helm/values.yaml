@@ -4,4 +4,4 @@
 
 replicaCount: 1
 
-image: 'hello-world:latest'
+image: '910121505252.dkr.ecr.ap-northeast-2.amazonaws.com/k8s-dev-test-app-repo:v1'

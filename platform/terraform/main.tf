@@ -19,7 +19,7 @@ module "dev_k8s_cluster" {
   k8s_instance_type           = local.dev.k8s_instance_type
   db_instance_type            = local.dev.db_instance_type
   vpc_id                      = module.dev_vpc.vpc_id
-  private_subnet_ids          = module.dev_vpc.private_subnets
+  subnet_ids                  = concat(module.dev_vpc.public_subnets,module.dev_vpc.private_subnets)
   private_subnets_cidr_blocks = module.dev_vpc.private_subnets_cidr_blocks
   database_subnet_group_name  = module.dev_vpc.database_subnet_group_name
 }

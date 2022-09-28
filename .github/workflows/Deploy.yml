@@ -66,7 +66,7 @@ jobs:
         id: ecr
         run: |
           NOW=$(date "+%Y%m%d-%H%M%S")
-          ./gradlew jib -s --profile --image=${{ secrets.ECR_AWS_ENDPOINT }}:${{ env.repo_name }}-rel-vMain${NOW}
+            ./gradlew jib -s --profile --image=${{ secrets.ECR_AWS_ENDPOINT }}:${{ env.repo_name }}-rel-vMain${NOW}
           echo ::set-output name=image::${{ env.repo_name }}-rel-vMain${NOW}
         working-directory: ./test-app
 
