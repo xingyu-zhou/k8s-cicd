@@ -9,7 +9,7 @@ on:
 
 env:
   namespace: default
-  cluster: my-k8s-sample
+  cluster: my-k8s-cluster
   repo_name: ${{ github.event.repository.name }}
 
 jobs:

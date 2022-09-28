@@ -11,14 +11,10 @@ module "rds-aurora" {
   engine_version = "5.7"
   instances      = {
     1 = {
-      instance_class      = var.db_instance_type
-      publicly_accessible = true
-    }
-    2 = {
       identifier     = "mysql-static-1"
       instance_class = var.db_instance_type
     }
-    3 = {
+    2 = {
       identifier     = "mysql-excluded-1"
       instance_class = var.db_instance_type
       promotion_tier = 15
