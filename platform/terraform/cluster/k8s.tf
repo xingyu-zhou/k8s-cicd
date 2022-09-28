@@ -7,13 +7,13 @@ module "eks" {
   version = "18.19.0"
 
   cluster_name                          = var.cluster_name
-  cluster_version                       = "1.24"
+  cluster_version                       = "1.22"
   cluster_endpoint_private_access       = true
   cluster_endpoint_public_access        = true
   cluster_additional_security_group_ids = [aws_security_group.eks.id]
 
   vpc_id     = var.vpc_id
-  subnet_ids = var.private_subnet_ids
+  subnet_ids = var.subnet_ids
 
   eks_managed_node_group_defaults = {
     ami_type               = "AL2_x86_64"

@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-northeast-1"
+  region = "ap-northeast-2"
 }
 
 data "aws_availability_zones" "available" {
