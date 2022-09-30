@@ -12,8 +12,8 @@ module "eks" {
   cluster_endpoint_public_access        = true
   cluster_additional_security_group_ids = [aws_security_group.eks.id]
 
-  vpc_id     = var.vpc_id
-  subnet_ids = var.subnet_ids
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = concat(module.vpc.public_subnets, module.vpc.private_subnets)
 
   eks_managed_node_group_defaults = {
     ami_type               = "AL2_x86_64"
@@ -77,16 +77,3 @@ resource "kubernetes_service_account" "service-account" {
   }
 }
 
-resource "kubernetes_secret_v1" "my-secrets" {
-  metadata {
-    name = "mysecret"
-  }
-
-  data = {
-    endpoint = module.rds-aurora.cluster_endpoint
-    username = module.rds-aurora.cluster_master_username
-    password = module.rds-aurora.cluster_master_password
-  }
-
-  type = "kubernetes.io/basic-auth"
-}

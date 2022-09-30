@@ -1,10 +1,4 @@
-variable "vpc_id" {}
 
-variable "subnet_ids" {}
-
-variable "database_subnet_group_name" {}
-
-variable "private_subnets_cidr_blocks" {}
 
 variable "tags" {
   default= {
@@ -23,10 +17,6 @@ variable "cluster_name" {
 
 variable "k8s_instance_type" {
   default = "t3.large"
-}
-
-variable "database_name" {
-  default   = "dev-aurora-mysql-cluster"
 }
 
 variable "db_instance_type" {

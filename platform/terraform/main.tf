@@ -2,6 +2,7 @@ locals {
   dev = {
     ecr               = ["test-app-repo"]
     k8s_instance_type = "t2.micro"
+    database_name     = "dev-aurora-mysql-cluster"
     db_instance_type  = "db.t3.medium"
     tags              = {
       Owner       = "my-k8s-sample"
@@ -11,15 +12,25 @@ locals {
 }
 
 module "dev_k8s_cluster" {
-  source                      = "./cluster"
-  tags                        = local.dev.tags
-  env_name                    = local.dev.tags.Environment
-  cluster_name                = local.dev.tags.Owner
-  ecr_names                   = local.dev.ecr
-  k8s_instance_type           = local.dev.k8s_instance_type
-  db_instance_type            = local.dev.db_instance_type
-  vpc_id                      = module.dev_vpc.vpc_id
-  subnet_ids                  = concat(module.dev_vpc.public_subnets,module.dev_vpc.private_subnets)
-  private_subnets_cidr_blocks = module.dev_vpc.private_subnets_cidr_blocks
-  database_subnet_group_name  = module.dev_vpc.database_subnet_group_name
+  source            = "./cluster"
+  tags              = local.dev.tags
+  env_name          = local.dev.tags.Environment
+  cluster_name      = local.dev.tags.Owner
+  ecr_names         = local.dev.ecr
+  k8s_instance_type = local.dev.k8s_instance_type
+  db_instance_type  = local.dev.db_instance_type
+}
+
+resource "kubernetes_secret_v1" "my-secrets" {
+  metadata {
+    name = "mysecret"
+  }
+
+  data = {
+    endpoint = module.rds-aurora.cluster_endpoint
+    username = module.rds-aurora.cluster_master_username
+    password = module.rds-aurora.cluster_master_password
+  }
+
+  type = "kubernetes.io/basic-auth"
 }

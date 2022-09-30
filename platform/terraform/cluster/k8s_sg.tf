@@ -1,7 +1,7 @@
 resource "aws_security_group" "eks" {
   name        = "${var.cluster_name} eks cluster"
   description = "Allow traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     description      = "World"
