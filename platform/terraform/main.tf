@@ -18,7 +18,6 @@ module "dev_k8s_cluster" {
   cluster_name      = local.dev.tags.Owner
   ecr_names         = local.dev.ecr
   k8s_instance_type = local.dev.k8s_instance_type
-  db_instance_type  = local.dev.db_instance_type
 }
 
 resource "kubernetes_secret_v1" "my-secrets" {
