@@ -31,12 +31,12 @@ module "dev_vpc" {
   enable_dns_hostnames = true
 
   public_subnet_tags = {
-    "kubernetes.io/cluster/dev" = "shared"
+    "kubernetes.io/cluster/my-k8s-sample" = "shared"
     "kubernetes.io/role/elb"    = "1"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/cluster/dev"       = "shared"
+    "kubernetes.io/cluster/my-k8s-sample"       = "shared"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
