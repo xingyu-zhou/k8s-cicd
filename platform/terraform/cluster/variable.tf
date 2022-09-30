@@ -1,5 +1,4 @@
 
-
 variable "tags" {
   default= {
     Owner       = "k8s-cluster"
@@ -17,10 +16,6 @@ variable "cluster_name" {
 
 variable "k8s_instance_type" {
   default = "t3.large"
-}
-
-variable "db_instance_type" {
-  default = "db.r5.large"
 }
 
 variable "ecr_names" {
