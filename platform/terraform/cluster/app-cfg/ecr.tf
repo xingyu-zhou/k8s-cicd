@@ -2,9 +2,10 @@ module "ecr" {
   source                 = "cloudposse/ecr/aws"
   # Cloud Posse recommends pinning every module to a specific version
   # version     = "x.x.x"
-  for_each               = toset(var.ecr_names)
+  for_each               = toset(var.applications_names)
   namespace              = "k8s"
-  stage                  = "${var.env_name}"
+  stage                  = var.env_name
   name                   = each.key
-  principals_full_access = [module.iam_assumable_role.iam_role_arn,module.lb_role.iam_role_arn]
+  principals_full_access = var.ecr_access_roles
+  tags                   = var.tags
 }

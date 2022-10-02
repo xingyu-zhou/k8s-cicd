@@ -6,26 +6,26 @@ module "rds-aurora" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "7.5.1"
 
-  name           = local.dev.database_name
+  name           = var.cluster_name
   engine         = "aurora-mysql"
   engine_version = "5.7"
   instances      = {
     1 = {
       identifier     = "mysql-static-1"
-      instance_class = local.dev.db_instance_type
+      instance_class = var.instance_class
     }
     2 = {
       identifier     = "mysql-excluded-1"
-      instance_class = local.dev.db_instance_type
+      instance_class = var.instance_class
       promotion_tier = 15
     }
   }
 
-  vpc_id                 = module.dev_k8s_cluster.vpc_id
-  db_subnet_group_name   = module.dev_k8s_cluster.database_subnet_group_name
+  vpc_id                 = var.vpc_id
+  db_subnet_group_name   = var.db_subnet_group_name
   create_db_subnet_group = false
   create_security_group  = true
-  allowed_cidr_blocks    = module.dev_k8s_cluster.private_subnets_cidr_blocks
+  allowed_cidr_blocks    = var.allowed_cidr_blocks
 
   iam_database_authentication_enabled = true
   master_password                     = random_password.master.result
@@ -35,9 +35,9 @@ module "rds-aurora" {
   skip_final_snapshot = true
 
   create_db_cluster_parameter_group      = true
-  db_cluster_parameter_group_name        = local.dev.database_name
+  db_cluster_parameter_group_name        = var.cluster_name
   db_cluster_parameter_group_family      = "aurora-mysql5.7"
-  db_cluster_parameter_group_description = "${local.dev.database_name} example cluster parameter group"
+  db_cluster_parameter_group_description = "${var.cluster_name} example cluster parameter group"
   db_cluster_parameter_group_parameters  = [
     {
       name         = "connect_timeout"
@@ -79,9 +79,9 @@ module "rds-aurora" {
   ]
 
   create_db_parameter_group      = true
-  db_parameter_group_name        = local.dev.database_name
+  db_parameter_group_name        = var.cluster_name
   db_parameter_group_family      = "aurora-mysql5.7"
-  db_parameter_group_description = "${local.dev.database_name} example DB parameter group"
+  db_parameter_group_description = "${var.cluster_name} example DB parameter group"
   db_parameter_group_parameters  = [
     {
       name         = "connect_timeout"
@@ -121,7 +121,7 @@ module "rds-aurora" {
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
   security_group_use_name_prefix  = false
 
-  tags = local.dev.tags
+  tags = var.tags
 }
 
 ################################################################################
