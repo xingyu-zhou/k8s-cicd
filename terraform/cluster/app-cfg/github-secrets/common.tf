@@ -9,7 +9,7 @@ resource "github_repository" "repo" {
 
   #  template {
   #    owner      = "github"
-  #    repository = "terraform-module-template"
+  #    repository = "k8s-cicd-app-template"
   #  }
 }
 

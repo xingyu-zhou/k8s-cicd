@@ -1,5 +1,5 @@
 module "eks_cluster" {
-  source            = "./eks-cluster"
+  source            = "eks-cluster"
   tags              = var.tags
   env_name          = var.tags.Environment
   cluster_name      = "eks-${var.tags.Owner}"
@@ -7,7 +7,7 @@ module "eks_cluster" {
 }
 
 module "rds_cluster" {
-  source = "./rds-cluster"
+  source = "rds-cluster"
   cluster_name = "rds-${var.tags.Owner}"
   instance_class = var.db_instance_type
   vpc_id = module.eks_cluster.vpc_id
@@ -16,7 +16,7 @@ module "rds_cluster" {
 }
 
 module "applications" {
-  source                = "./app-cfg"
+  source                = "app-cfg"
   applications_names    = var.application_names
   env_name              = var.tags.Environment
   eks_cluster_id        = module.eks_cluster.cluster_id

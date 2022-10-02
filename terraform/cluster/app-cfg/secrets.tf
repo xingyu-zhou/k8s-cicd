@@ -1,5 +1,5 @@
 module "github_secrets" {
-  source = "./github-secrets"
+  source = "github-secrets"
 
   for_each = tomap(module.ecr)
   ecr_aws_region        = var.ecr_aws_region
