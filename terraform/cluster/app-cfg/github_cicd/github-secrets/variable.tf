@@ -1,5 +1,8 @@
 variable "repo_name" {}
-variable "environment" {}
+variable "repo_environment" {
+  default = ""
+}
+
 variable "aws_access_key" {}
 variable "aws_access_key_secret" {}
 variable "ecr_aws_region" {}

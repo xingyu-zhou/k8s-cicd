@@ -1,13 +1,11 @@
+resource "aws_iam_role" "this" {
+  for_each           = toset(var.applications_names)
+  name               = each.key
+  assume_role_policy = module.iam_policy.policy
+}
 
- resource "aws_iam_role" "this" {
-   for_each               = toset(var.applications_names)
-   name               = each.key
-   assume_role_policy = module.iam_policy.
- }
-
-//noinspection MissingModule
 module "iam_policy" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  source = "registry.terraform.io/terraform-aws-modules/iam/aws//modules/iam-policy"
 
   name        = "example"
   path        = "/"
