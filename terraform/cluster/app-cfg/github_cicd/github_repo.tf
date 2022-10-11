@@ -2,6 +2,14 @@
 #  full_name = var.repo_name
 #}
 
+variable "repo_name" {
+  default = ""
+}
+
+variable "environment" {
+  default = ""
+}
+
 resource "github_repository" "repo" {
   name = var.repo_name
 

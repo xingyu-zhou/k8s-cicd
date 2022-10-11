@@ -12,7 +12,7 @@ locals {
 }
 
 module "dev" {
-  source            = "cluster"
+  source            = "./cluster"
   tags              = local.dev.tags
   k8s_instance_type = local.dev.k8s_instance_type
   db_instance_type  = local.dev.db_instance_type
