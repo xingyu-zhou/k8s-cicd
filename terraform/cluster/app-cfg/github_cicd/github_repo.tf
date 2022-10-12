@@ -1,17 +1,16 @@
-#data "github_repository" "repo" {
-#  full_name = var.repo_name
-#}
-
-variable "repo_name" {
-  default = ""
+data "github_repository" "repo" {
+  full_name = var.repo_name
 }
 
-variable "environment" {
-  default = ""
-}
+resource "github_repository_environment" "repo_environment" {
+  count       = length(data.github_repository.repo) > 0?1 : 0
+  repository  = data.github_repository.repo.name
+  environment = var.environment
 
+}
 resource "github_repository" "repo" {
-  name = var.repo_name
+  count = length(data.github_repository.repo) > 0?0 : 1
+  name  = var.repo_name
 
   visibility = "private"
 
@@ -21,8 +20,9 @@ resource "github_repository" "repo" {
   #  }
 }
 
+
 resource "github_repository_environment" "repo_environment" {
-  #  repository       = data.github_repository.repo.name
+  count       = length(data.github_repository.repo) > 0?0 : 1
   repository  = github_repository.repo.name
   environment = var.environment
 }

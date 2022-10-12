@@ -6,6 +6,6 @@ module "ecr" {
   namespace              = "k8s"
   stage                  = var.env_name
   name                   = each.key
-  principals_full_access = aws_iam_role.this.arn
+  principals_full_access = [module.iam_assumable_role.iam_role_arn]
   tags                   = var.tags
 }

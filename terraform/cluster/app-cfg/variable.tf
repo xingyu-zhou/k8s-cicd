@@ -9,6 +9,14 @@ variable "env_name" {
   default = "dev"
 }
 
+variable "repo_name" {
+  default = ""
+}
+
+variable "environment" {
+  default = ""
+}
+
 variable "applications_names" {
   default = ["dev-k8s-sample"]
 }

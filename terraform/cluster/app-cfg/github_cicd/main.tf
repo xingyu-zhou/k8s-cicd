@@ -1,7 +1,7 @@
 module "github_secrets" {
-  source = "github-secrets"
+  source = "./github-secrets"
 
-  for_each = toset(var.applications_names)
+  for_each              = toset(var.applications_names)
   ecr_aws_region        = var.ecr_aws_region
   aws_access_key        = var.aws_access_key
   aws_access_key_secret = var.aws_access_key_secret
@@ -9,7 +9,7 @@ module "github_secrets" {
   environment           = var.env_name
   ecr_aws_endpoint      = each.value.repository_url
   repo_name             = each.value.repository_name
-#  repo_name             = "xingyu-zhou/${each.value.repository_name}"
+  #  repo_name             = "xingyu-zhou/${each.value.repository_name}"
 }
 
 resource "kubernetes_secret_v1" "k8s-secrets" {

@@ -7,6 +7,12 @@ variable "aws_access_key_secret" {
 variable "aws_access_key" {
   default = ""
 }
+variable "repo_name" {
+  default = ""
+}
+variable "environment" {
+  default = ""
+}
 variable "applications_names" {}
 variable "cluster_name" {}
 variable "eks_cluster_id" {}
